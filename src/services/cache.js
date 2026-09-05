@@ -16,12 +16,16 @@ function getDb() {
   })
 }
 
+function toPlain(value) {
+  return JSON.parse(JSON.stringify(value))
+}
+
 export async function saveNotesCache(notes) {
   const db = await getDb()
   const tx = db.transaction(['notes', 'meta'], 'readwrite')
   const store = tx.objectStore('notes')
   await store.clear()
-  for (const note of notes) {
+  for (const note of toPlain(notes)) {
     await store.put(note)
   }
   await tx.objectStore('meta').put(Date.now(), 'cached_at')
