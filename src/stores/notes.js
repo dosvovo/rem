@@ -76,9 +76,13 @@ export const useNotesStore = defineStore('notes', () => {
     return data
   }
 
-  function sendNoteEmail(note) {
+  async function sendNoteEmail(note) {
+    const { data: sessionData } = await supabase.auth.getSession()
+    const token = sessionData.session?.access_token
+    if (!token) return
     supabase.functions
       .invoke('send-note-email', {
+        headers: { Authorization: `Bearer ${token}` },
         body: {
           title: note.title,
           content: note.content,
