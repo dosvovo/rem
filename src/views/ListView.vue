@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useNotesStore } from '../stores/notes'
-import { formatNoteTime, noteTitle, notePreview } from '../utils/note'
+import { formatNoteTime, formatFullTime, noteTitle, notePreview } from '../utils/note'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -72,6 +72,10 @@ async function logout() {
             <span class="card-time">{{ formatNoteTime(note.updated_at) }}</span>
           </div>
           <p v-if="notePreview(note)" class="card-body">{{ notePreview(note) }}</p>
+          <p class="card-meta">
+            记于 {{ formatFullTime(note.created_at) }} ·
+            {{ note.edited ? `改于 ${formatFullTime(note.updated_at)}` : '未修改' }}
+          </p>
         </article>
       </template>
 
@@ -89,6 +93,10 @@ async function logout() {
             <span class="card-time">{{ formatNoteTime(note.updated_at) }}</span>
           </div>
           <p v-if="notePreview(note)" class="card-body">{{ notePreview(note) }}</p>
+          <p class="card-meta">
+            记于 {{ formatFullTime(note.created_at) }} ·
+            {{ note.edited ? `改于 ${formatFullTime(note.updated_at)}` : '未修改' }}
+          </p>
         </article>
       </template>
     </main>
@@ -222,6 +230,12 @@ h1 {
   -webkit-box-orient: vertical;
   overflow: hidden;
   white-space: pre-line;
+}
+
+.card-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #a8a29e;
 }
 
 .color-red { background: #fee2e2; }

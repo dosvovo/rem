@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useNotesStore, NOTE_COLORS } from '../stores/notes'
-import { isOnline } from '../utils/note'
+import { formatFullTime, isOnline } from '../utils/note'
 
 const route = useRoute()
 const router = useRouter()
@@ -139,6 +139,10 @@ async function remove() {
     ></textarea>
 
     <section class="tools">
+      <div v-if="isEdit && existing" class="meta-row">
+        <span>记于 {{ formatFullTime(existing.created_at) }}</span>
+        <span>{{ existing.edited ? `改于 ${formatFullTime(existing.updated_at)}` : '未修改' }}</span>
+      </div>
       <div class="tool-row">
         <span class="tool-label">颜色</span>
         <div class="colors">
@@ -241,6 +245,14 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #a8a29e;
 }
 
 .tool-label {

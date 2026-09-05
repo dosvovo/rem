@@ -8,6 +8,7 @@ create table if not exists public.notes (
   title text,
   content text not null,
   pinned boolean not null default false,
+  edited boolean not null default false,
   color text not null default 'default'
     check (color in ('default', 'red', 'orange', 'yellow', 'green', 'blue')),
   created_at timestamptz not null default now(),

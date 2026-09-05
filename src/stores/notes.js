@@ -78,7 +78,7 @@ export const useNotesStore = defineStore('notes', () => {
   async function updateNote(id, patch) {
     const { data, error } = await supabase
       .from('notes')
-      .update(patch)
+      .update({ ...patch, edited: true })
       .eq('id', id)
       .select()
       .single()

@@ -13,6 +13,17 @@ export function formatNoteTime(iso) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 }
 
+export function formatFullTime(iso) {
+  const date = new Date(iso)
+  const now = new Date()
+  const pad = (n) => String(n).padStart(2, '0')
+  const datePart =
+    date.getFullYear() === now.getFullYear()
+      ? `${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+      : `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+  return `${datePart} ${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
 export function noteTitle(note) {
   if (note.title && note.title.trim()) return note.title.trim()
   const firstLine = note.content.split('\n').find((l) => l.trim())
