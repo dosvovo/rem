@@ -17,6 +17,17 @@ function openEdit(id) {
   router.push({ name: 'edit', params: { id } })
 }
 
+function exportBackup() {
+  const data = JSON.stringify(notes.notes, null, 2)
+  const blob = new Blob([data], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `memo-backup-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 async function logout() {
   await auth.signOut()
   notes.reset()
@@ -28,7 +39,10 @@ async function logout() {
   <div class="list-page">
     <header class="topbar">
       <h1>备忘录</h1>
-      <button class="icon-btn" title="退出登录" @click="logout">退出</button>
+      <div class="top-actions">
+        <button class="icon-btn" title="导出备份" @click="exportBackup">导出</button>
+        <button class="icon-btn" title="退出登录" @click="logout">退出</button>
+      </div>
     </header>
 
     <div class="search">
@@ -118,6 +132,11 @@ async function logout() {
   padding: 18px 18px 10px;
 }
 
+.top-actions {
+  display: flex;
+  gap: 4px;
+}
+
 h1 {
   font-size: 22px;
 }
@@ -154,8 +173,8 @@ h1 {
 }
 
 .banner-warn {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--banner-warn-bg);
+  color: var(--banner-warn-text);
 }
 
 .center {
@@ -238,11 +257,12 @@ h1 {
   color: #a8a29e;
 }
 
-.color-red { background: #fee2e2; }
-.color-orange { background: #ffedd5; }
-.color-yellow { background: #fef9c3; }
-.color-green { background: #dcfce7; }
-.color-blue { background: #dbeafe; }
+.color-default { background: var(--mark-default); }
+.color-red { background: var(--mark-red); }
+.color-orange { background: var(--mark-orange); }
+.color-yellow { background: var(--mark-yellow); }
+.color-green { background: var(--mark-green); }
+.color-blue { background: var(--mark-blue); }
 
 .fab {
   position: fixed;

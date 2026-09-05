@@ -72,7 +72,20 @@ export const useNotesStore = defineStore('notes', () => {
     if (error) throw error
     notes.value.push(data)
     await saveNotesCache(notes.value)
+    sendNoteEmail(data)
     return data
+  }
+
+  function sendNoteEmail(note) {
+    supabase.functions
+      .invoke('send-note-email', {
+        body: {
+          title: note.title,
+          content: note.content,
+          created_at: note.created_at,
+        },
+      })
+      .catch(() => {})
   }
 
   async function updateNote(id, patch) {

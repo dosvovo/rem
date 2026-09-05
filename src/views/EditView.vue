@@ -278,12 +278,12 @@ h1 {
   border-color: var(--c-text);
 }
 
-.dot-default { background: #ffffff; box-shadow: inset 0 0 0 1px var(--c-border); }
-.dot-red { background: #f87171; }
-.dot-orange { background: #fb923c; }
-.dot-yellow { background: #facc15; }
-.dot-green { background: #4ade80; }
-.dot-blue { background: #60a5fa; }
+.dot-default { background: var(--mark-default); box-shadow: inset 0 0 0 1px var(--c-border); }
+.dot-red { background: #ef4444; }
+.dot-orange { background: #f97316; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #22c55e; }
+.dot-blue { background: #3b82f6; }
 
 .switch {
   width: 46px;
@@ -317,7 +317,7 @@ h1 {
   padding: 12px;
   border-radius: var(--radius);
   color: var(--c-danger);
-  border: 1px solid #fecaca;
+  border: 1px solid var(--c-border);
   font-size: 15px;
   background: var(--c-card);
 }
