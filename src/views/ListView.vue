@@ -40,6 +40,9 @@ async function logout() {
     <header class="topbar">
       <h1>备忘录</h1>
       <div class="top-actions">
+        <button class="icon-btn" title="定时邮件" @click="router.push({ name: 'schedule' })">
+          定时
+        </button>
         <button class="icon-btn" title="导出备份" @click="exportBackup">导出</button>
         <button class="icon-btn" title="退出登录" @click="logout">退出</button>
       </div>

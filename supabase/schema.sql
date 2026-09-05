@@ -58,3 +58,44 @@ create policy "用户可删除自己的笔记"
 
 -- 幂等补列：对已建好 notes 表的环境补充 edited 字段，可重复执行
 alter table public.notes add column if not exists edited boolean not null default false;
+
+-- ============ 定时邮件 ============
+create table if not exists public.scheduled_emails (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  title text not null,
+  content text not null,
+  frequency text not null check (frequency in ('daily', 'weekly', 'monthly')),
+  weekday int,
+  monthday int,
+  send_time text not null,
+  enabled boolean not null default true,
+  next_send_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists scheduled_emails_due_idx
+  on public.scheduled_emails (enabled, next_send_at);
+
+alter table public.scheduled_emails enable row level security;
+
+drop policy if exists "用户可查看自己的定时邮件" on public.scheduled_emails;
+create policy "用户可查看自己的定时邮件"
+  on public.scheduled_emails for select
+  using (auth.uid() = user_id);
+
+drop policy if exists "用户可创建自己的定时邮件" on public.scheduled_emails;
+create policy "用户可创建自己的定时邮件"
+  on public.scheduled_emails for insert
+  with check (auth.uid() = user_id);
+
+drop policy if exists "用户可更新自己的定时邮件" on public.scheduled_emails;
+create policy "用户可更新自己的定时邮件"
+  on public.scheduled_emails for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "用户可删除自己的定时邮件" on public.scheduled_emails;
+create policy "用户可删除自己的定时邮件"
+  on public.scheduled_emails for delete
+  using (auth.uid() = user_id);

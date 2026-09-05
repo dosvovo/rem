@@ -6,6 +6,7 @@ const routes = [
   { path: '/', name: 'list', component: () => import('../views/ListView.vue') },
   { path: '/new', name: 'new', component: () => import('../views/EditView.vue') },
   { path: '/edit/:id', name: 'edit', component: () => import('../views/EditView.vue') },
+  { path: '/schedule', name: 'schedule', component: () => import('../views/ScheduledView.vue') },
   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
