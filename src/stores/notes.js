@@ -80,16 +80,22 @@ export const useNotesStore = defineStore('notes', () => {
     const { data: sessionData } = await supabase.auth.getSession()
     const token = sessionData.session?.access_token
     if (!token) return
-    supabase.functions
-      .invoke('send-note-email', {
-        headers: { Authorization: `Bearer ${token}` },
-        body: {
+    fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-note-email`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           title: note.title,
           content: note.content,
           created_at: note.created_at,
-        },
-      })
-      .catch(() => {})
+        }),
+      }
+    ).catch(() => {})
   }
 
   async function updateNote(id, patch) {
