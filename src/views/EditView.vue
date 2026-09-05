@@ -98,7 +98,7 @@ async function save() {
         color: color.value,
       })
     }
-    router.replace({ name: 'list' })
+    await router.replace({ name: 'list' })
   } catch (e) {
     showToast(e.message ?? '保存失败，请重试')
   } finally {
@@ -111,7 +111,7 @@ async function remove() {
   saving.value = true
   try {
     await notes.deleteNote(existing.value.id)
-    router.replace({ name: 'list' })
+    await router.replace({ name: 'list' })
   } catch (e) {
     showToast(e.message ?? '删除失败，请重试')
     saving.value = false
