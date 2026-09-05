@@ -23,3 +23,5 @@ This file records user instructions, preferences, and teachings for reference in
   - Supabase 凭据已在项目根目录 .env 中配置（VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY），anon key 为用户自有 publishable key
   - 用户剩余待办：在 Supabase Dashboard 的 SQL Editor 中执行 supabase/schema.sql 完成建表，然后注册账号
   - Supabase 免费项目 7 天不活跃会被暂停，暂停后到 Dashboard 手动恢复即可
+  - 邮件副本功能：保存笔记时前端原生 fetch 调用 Edge Function send-note-email，函数代码存于 supabase/functions/send-note-email/index.ts，依赖项目 Secrets RESEND_API_KEY 和 NOTE_EMAIL_TO，免费模式收件邮箱必须与 Resend 注册邮箱一致
+  - Edge Function 必须处理 CORS（响应 OPTIONS + corsHeaders），否则浏览器预检失败，函数日志里只会看到无 Authorization 的空请求
