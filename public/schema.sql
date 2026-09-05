@@ -8,6 +8,7 @@ create table if not exists public.notes (
   title text,
   content text not null,
   pinned boolean not null default false,
+  edited boolean not null default false,
   color text not null default 'default'
     check (color in ('default', 'red', 'orange', 'yellow', 'green', 'blue')),
   created_at timestamptz not null default now(),
@@ -54,3 +55,6 @@ drop policy if exists "用户可删除自己的笔记" on public.notes;
 create policy "用户可删除自己的笔记"
   on public.notes for delete
   using (auth.uid() = user_id);
+
+-- 幂等补列：对已建好 notes 表的环境补充 edited 字段，可重复执行
+alter table public.notes add column if not exists edited boolean not null default false;

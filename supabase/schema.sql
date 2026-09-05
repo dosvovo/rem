@@ -55,3 +55,6 @@ drop policy if exists "用户可删除自己的笔记" on public.notes;
 create policy "用户可删除自己的笔记"
   on public.notes for delete
   using (auth.uid() = user_id);
+
+-- 幂等补列：对已建好 notes 表的环境补充 edited 字段，可重复执行
+alter table public.notes add column if not exists edited boolean not null default false;
