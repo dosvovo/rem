@@ -15,9 +15,10 @@ import kotlin.math.abs
 import kotlin.math.min
 
 class OverlayTextView(
-    context: Context,
-    private val onClose: () -> Unit
+    context: Context
 ) : AppCompatTextView(context) {
+
+    var onClose: (() -> Unit)? = null
 
     private var windowManager: WindowManager? = null
     private var layoutParams: WindowManager.LayoutParams? = null
@@ -123,7 +124,7 @@ class OverlayTextView(
                 invalidate()
                 if (elapsed >= CLOSE_DURATION_MILLIS) {
                     performHapticFeedbackSafe()
-                    onClose()
+                    onClose?.invoke()
                     return true
                 }
             }

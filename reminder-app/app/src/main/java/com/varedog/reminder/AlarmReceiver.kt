@@ -3,6 +3,9 @@ package com.varedog.reminder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -12,11 +15,11 @@ class AlarmReceiver : BroadcastReceiver() {
         if (id <= 0L) return
 
         val pending = goAsync()
-        Thread {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val dao = AppDatabase.get(context).reminderDao()
-                val reminder = dao.getById(id) ?: return@Thread
-                if (!reminder.enabled) return@Thread
+                val reminder = dao.getById(id) ?: return@launch
+                if (!reminder.enabled) return@launch
 
                 // 弹出悬浮提醒（服务保活窗口）
                 val service = Intent(context, OverlayService::class.java)
@@ -32,7 +35,7 @@ class AlarmReceiver : BroadcastReceiver() {
             } finally {
                 pending.finish()
             }
-        }.start()
+        }
     }
 
     private fun nextTriggerMillis(reminder: Reminder): Long? {

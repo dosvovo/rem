@@ -54,9 +54,9 @@ class OverlayService : Service() {
     }
 
     private fun showOverlay(content: String) {
-        val view = OverlayTextView(this) { removeOverlay(it) }.apply {
-            text = content
-        }
+        val view = OverlayTextView(this)
+        view.text = content
+        view.onClose = { removeOverlay(view) }
         view.attach(windowManager, OverlayTextView.buildLayoutParams(this))
         views.add(view)
     }
