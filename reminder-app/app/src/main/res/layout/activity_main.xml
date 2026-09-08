@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/banner_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF8E1"
+        android:padding="12dp"
+        android:text="第 1 步：点击授权悬浮窗权限（必需）"
+        android:textColor="#8A6D1A"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/banner_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF8E1"
+        android:padding="12dp"
+        android:text="第 2 步：点击授权精确闹钟权限（保证准时）"
+        android:textColor="#8A6D1A"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/banner_battery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E8F5E9"
+        android:padding="12dp"
+        android:text="建议：加入电池优化白名单，防止提醒失效"
+        android:textColor="#2E5B2F"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:contentDescription="新建提醒"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#F59E0B"
+        app:tint="@android:color/white" />
+</LinearLayout>
