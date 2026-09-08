@@ -91,7 +91,7 @@ class OverlayTextView(
                 -90f, 360f * fraction, false, ringPaint
             )
         }
-        if (elapsed < CLOSE_DURATION_MILLIS) {
+        if (elapsed < closeDurationMillis) {
             postInvalidateDelayed(50)
         }
     }
