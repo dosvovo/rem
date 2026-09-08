@@ -2,8 +2,8 @@ package com.varedog.mirror
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Inet4Address
-import android.net.NetworkInterface
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
