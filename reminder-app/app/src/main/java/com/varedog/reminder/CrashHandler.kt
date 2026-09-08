@@ -51,8 +51,20 @@ class CrashReportActivity : AppCompatActivity() {
             text = intent.getStringExtra(EXTRA_TEXT) ?: "无日志"
             textSize = 12f
         }
-        setContentView(ScrollView(this).apply { addView(tv) })
-        title = "错误详情（点内容任意处可选中复制，返回键关闭）"
+        val btn = android.widget.Button(this).apply {
+            text = "继续进入应用"
+            setOnClickListener {
+                startActivity(Intent(this@CrashReportActivity, MainActivity::class.java))
+                finish()
+            }
+        }
+        val box = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            addView(tv)
+            addView(btn)
+        }
+        setContentView(ScrollView(this).apply { addView(box) })
+        title = "错误详情（长按文字可选中复制）"
     }
 
     companion object {

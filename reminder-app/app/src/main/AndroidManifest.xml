@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Reminder">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".LauncherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CrashReportActivity" android:exported="false" />
+        <activity
+            android:name=".CrashReportActivity"
+            android:exported="false"
+            android:process=":crash" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
 
         <receiver
             android:name=".AlarmReceiver"
