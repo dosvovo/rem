@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="局域网投屏"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="前提：手机和电视连接同一个 WiFi"
+        android:textColor="#9CA3AF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/text_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="本机 IP：读取中…"
+        android:textColor="#FBBF24"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/button_receiver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="接收投屏（电视上点这个）"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/button_sender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="发送投屏（手机上点这个）"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:text="使用方法：\n1. 电视打开本应用 → 接收投屏，记住屏幕上的 IP\n2. 手机打开本应用 → 发送投屏 → 输入电视的 IP\n3. 允许屏幕采集授权后开始投屏"
+        android:textColor="#9CA3AF"
+        android:textSize="13sp" />
+</LinearLayout>
