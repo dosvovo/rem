@@ -12,6 +12,18 @@ This file records user instructions, preferences, and teachings for reference in
 
 ## Entries
 
+[APK 调试标准流程 - 崩溃日志收集方案]
+- Date: 2026-09-08
+- Context: reminder-app APK 启动闪退排查成功后，用户要求以后所有 APK 调试都沿用此方案
+- Category: Troubleshooting & Debugging | Workflow & Collaboration
+- Instructions:
+  - 新 Android 项目默认内置崩溃收集四件套：CrashHandler（写 filesDir/crash.txt）+ ReminderApp(Application onCreate 安装 handler) + LauncherActivity 预演入口 + CrashReportActivity（android:process=":crash" 独立进程显示日志）
+  - 排查真机闪退时优先走"诊断页截图"路径拿日志，adb logcat 仅作为兜底（用户无电脑 adb 环境时这是唯一手段）
+  - LauncherActivity 作为 LAUNCHER 入口：先 consume crash.txt，再 try-catch 预演高风险初始化（inflate 主布局、数据库首查），通过后才进 MainActivity；业务崩溃与诊断代码隔离
+  - CrashReportActivity 必须独立进程，否则随主进程死亡而消失；文本 setTextIsSelectable 支持长按复制，附"继续进入应用"按钮
+  - crash.txt 读后即删（consume），防止每次启动重复弹日志
+  - 高频崩溃源：findViewById 的 Kotlin 声明类型必须与 XML 实际类型精确匹配（Material/AppCompat 主题会把 TextView 替换为 MaterialTextView），suspend 函数在 Thread 里调不编译，需用 CoroutineScope+goAsync
+
 [Personal Memo App - Project Status]
 - Date: 2026-09-05
 - Context: Agent 在实现 personal-memo 项目后记录的项目运行与环境知识
