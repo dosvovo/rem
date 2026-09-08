@@ -52,6 +52,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        CrashHandler.consume(this)?.let {
+            startActivity(
+                Intent(this, CrashReportActivity::class.java)
+                    .putExtra(CrashReportActivity.EXTRA_TEXT, it)
+            )
+        }
+
         setContentView(R.layout.activity_main)
 
         dao = AppDatabase.get(this).reminderDao()
