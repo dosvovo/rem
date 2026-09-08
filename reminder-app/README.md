@@ -42,3 +42,5 @@ reminder-app/
 │   └── Reminder.kt / ReminderDao.kt / AppDatabase.kt
 └── app/src/main/AndroidManifest.xml
 ```
+
+构建版本 v1.0.2（含崩溃日志收集）
