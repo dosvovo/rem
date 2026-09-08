@@ -42,8 +42,8 @@ class OverlayTextView(
 
     init {
         val density = resources.displayMetrics.density
-        setTextColor(Color.WHITE)
-        textSize = 15f
+        setTextColor(Prefs.textColor(context))
+        textSize = Prefs.textSize(context).toFloat()
         setShadowLayer(4f, 0f, 1f, Color.BLACK)
         setLineSpacing(density * 2f, 1f)
         val pad = (density * 12).toInt()

@@ -140,43 +140,23 @@ class MainActivity : AppCompatActivity() {
     private fun showSettingsDialog() {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_settings, null)
         val swatches = view.findViewById<LinearLayout>(R.id.swatches)
+        val swatchesText = view.findViewById<LinearLayout>(R.id.swatches_text)
         val transparentSwitch = view.findViewById<CompoundButton>(R.id.switch_transparent)
         val xInput = view.findViewById<EditText>(R.id.input_x)
         val yInput = view.findViewById<EditText>(R.id.input_y)
         val secInput = view.findViewById<EditText>(R.id.input_seconds)
+        val sizeInput = view.findViewById<EditText>(R.id.input_textsize)
 
         transparentSwitch.isChecked = Prefs.bgTransparent(this)
         xInput.setText(Prefs.posX(this).toString())
         yInput.setText(Prefs.posY(this).toString())
         secInput.setText(Prefs.closeSeconds(this).toString())
+        sizeInput.setText(Prefs.textSize(this).toString())
 
-        var selectedColor = Prefs.bgColor(this)
-        val dotSize = (resources.displayMetrics.density * 32).toInt()
-        val dotMargin = (resources.displayMetrics.density * 6).toInt()
-        Prefs.PRESET_COLORS.forEach { color ->
-            val dot = View(this)
-            dot.background = android.graphics.drawable.GradientDrawable().apply {
-                shape = android.graphics.drawable.GradientDrawable.OVAL
-                setColor(color)
-            }
-            dot.layoutParams = LinearLayout.LayoutParams(dotSize, dotSize).apply {
-                marginEnd = dotMargin
-            }
-            if (color == selectedColor) {
-                dot.scaleX = 1.25f
-                dot.scaleY = 1.25f
-            }
-            dot.setOnClickListener {
-                selectedColor = color
-                for (i in 0 until swatches.childCount) {
-                    swatches.getChildAt(i).scaleX = 1f
-                    swatches.getChildAt(i).scaleY = 1f
-                }
-                it.scaleX = 1.25f
-                it.scaleY = 1.25f
-            }
-            swatches.addView(dot)
-        }
+        var selectedBg = Prefs.bgColor(this)
+        var selectedText = Prefs.textColor(this)
+        addSwatches(swatches, Prefs.PRESET_COLORS, selectedBg) { selectedBg = it }
+        addSwatches(swatchesText, Prefs.PRESET_TEXT_COLORS, selectedText) { selectedText = it }
 
         AlertDialog.Builder(this)
             .setTitle("悬浮窗设置")
@@ -185,11 +165,50 @@ class MainActivity : AppCompatActivity() {
                 val x = xInput.text.toString().toIntOrNull() ?: Prefs.posX(this)
                 val y = yInput.text.toString().toIntOrNull() ?: Prefs.posY(this)
                 val seconds = (secInput.text.toString().toIntOrNull() ?: 5).coerceIn(1, 60)
-                Prefs.save(this, selectedColor, transparentSwitch.isChecked, x, y, seconds)
+                val size = (sizeInput.text.toString().toIntOrNull() ?: 15).coerceIn(12, 40)
+                Prefs.save(
+                    this, selectedBg, selectedText, transparentSwitch.isChecked,
+                    x, y, seconds, size
+                )
                 Toast.makeText(this, "已保存，下次弹出生效", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("取消", null)
             .show()
+    }
+
+    private fun addSwatches(
+        container: LinearLayout,
+        colors: IntArray,
+        current: Int,
+        onSelect: (Int) -> Unit
+    ) {
+        val density = resources.displayMetrics.density
+        val dotSize = (density * 32).toInt()
+        val dotMargin = (density * 6).toInt()
+        colors.forEach { color ->
+            val dot = View(this)
+            dot.background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.OVAL
+                setColor(color)
+            }
+            dot.layoutParams = LinearLayout.LayoutParams(dotSize, dotSize).apply {
+                marginEnd = dotMargin
+            }
+            if (color == current) {
+                dot.scaleX = 1.25f
+                dot.scaleY = 1.25f
+            }
+            dot.setOnClickListener {
+                onSelect(color)
+                for (i in 0 until container.childCount) {
+                    container.getChildAt(i).scaleX = 1f
+                    container.getChildAt(i).scaleY = 1f
+                }
+                it.scaleX = 1.25f
+                it.scaleY = 1.25f
+            }
+            container.addView(dot)
+        }
     }
 
     private fun confirmDelete(reminder: Reminder) {
