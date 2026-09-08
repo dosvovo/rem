@@ -13,20 +13,31 @@ object AlarmScheduler {
         val pending = pendingIntent(context, reminder.id)
         alarm.cancel(pending)
         if (!reminder.enabled) return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarm.canScheduleExactAlarms()) {
-            // 无精确闹钟权限时退化为窗口闹钟，保证功能可用
-            alarm.setAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                reminder.triggerAtMillis,
-                pending
+        try {
+            // setAlarmClock 最精确、不受 SCHEDULE_EXACT_ALARM 限制，
+            // 且触发时进程处于活跃状态，允许启动前台服务
+            val show = PendingIntent.getActivity(
+                context,
+                0,
+                Intent(context, MainActivity::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            return
+            alarm.setAlarmClock(AlarmManager.AlarmClockInfo(reminder.triggerAtMillis, show), pending)
+        } catch (_: Throwable) {
+            try {
+                alarm.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    reminder.triggerAtMillis,
+                    pending
+                )
+            } catch (_: Throwable) {
+                alarm.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    reminder.triggerAtMillis,
+                    pending
+                )
+            }
         }
-        alarm.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            reminder.triggerAtMillis,
-            pending
-        )
     }
 
     fun cancel(context: Context, reminderId: Long) {

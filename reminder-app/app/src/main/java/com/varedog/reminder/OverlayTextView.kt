@@ -19,6 +19,7 @@ class OverlayTextView(
 ) : AppCompatTextView(context) {
 
     var onClose: (() -> Unit)? = null
+    var closeDurationMillis: Long = 5000L
 
     private var windowManager: WindowManager? = null
     private var layoutParams: WindowManager.LayoutParams? = null
@@ -48,9 +49,14 @@ class OverlayTextView(
         val pad = (density * 12).toInt()
         setPadding(pad, pad, pad, pad)
         maxWidth = (density * 280).toInt()
-        background = GradientDrawable().apply {
-            cornerRadius = density * 14f
-            setColor(0xE6181818.toInt())
+        closeDurationMillis = Prefs.closeSeconds(context) * 1000L
+        background = if (Prefs.bgTransparent(context)) {
+            null
+        } else {
+            GradientDrawable().apply {
+                cornerRadius = density * 14f
+                setColor(Prefs.bgColor(context))
+            }
         }
     }
 
@@ -71,7 +77,7 @@ class OverlayTextView(
         super.onDraw(canvas)
         if (pressStartMillis == 0L) return
         val elapsed = SystemClock.elapsedRealtime() - pressStartMillis
-        val fraction = min(1f, elapsed / CLOSE_DURATION_MILLIS.toFloat())
+        val fraction = min(1f, elapsed / closeDurationMillis.toFloat())
         val density = resources.displayMetrics.density
         val radius = 9f * density
         val cx = width - radius - 4f * density
@@ -122,7 +128,7 @@ class OverlayTextView(
                 pressStartMillis = 0L
                 dragging = false
                 invalidate()
-                if (elapsed >= CLOSE_DURATION_MILLIS) {
+                if (elapsed >= closeDurationMillis) {
                     performHapticFeedbackSafe()
                     onClose?.invoke()
                     return true
@@ -137,12 +143,11 @@ class OverlayTextView(
     }
 
     companion object {
-        const val CLOSE_DURATION_MILLIS = 5000L
         private const val TOUCH_SLOP = 6f
 
-        fun buildLayoutParams(context: Context): WindowManager.LayoutParams {
-            val metrics = context.resources.displayMetrics
-            val density = metrics.density
+        fun buildLayoutParams(context: Context, index: Int): WindowManager.LayoutParams {
+            val density = context.resources.displayMetrics.density
+            val stack = (index * 40 * density).toInt()
             return WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -152,8 +157,8 @@ class OverlayTextView(
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
-                x = (metrics.widthPixels - 40 * density).toInt()
-                y = (200 * density).toInt()
+                x = Prefs.posX(context) + stack
+                y = Prefs.posY(context) + stack
             }
         }
     }

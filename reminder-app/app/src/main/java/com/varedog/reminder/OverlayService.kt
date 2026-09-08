@@ -40,7 +40,7 @@ class OverlayService : Service() {
             androidx.core.app.NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle("提醒显示中")
-                .setContentText("按住悬浮文本 5 秒可关闭")
+                .setContentText("长按悬浮文本可关闭")
                 .setOngoing(true)
                 .build()
         ServiceCompat.startForeground(
@@ -57,7 +57,7 @@ class OverlayService : Service() {
         val view = OverlayTextView(this)
         view.text = content
         view.onClose = { removeOverlay(view) }
-        view.attach(windowManager, OverlayTextView.buildLayoutParams(this))
+        view.attach(windowManager, OverlayTextView.buildLayoutParams(this, views.size))
         views.add(view)
     }
 
