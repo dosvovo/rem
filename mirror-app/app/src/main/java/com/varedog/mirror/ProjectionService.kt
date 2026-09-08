@@ -18,7 +18,6 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Base64
 import android.widget.Toast
-import androidx.annotation.Nullable
 import org.json.JSONObject
 import java.io.BufferedOutputStream
 import java.io.DataOutputStream
@@ -39,7 +38,6 @@ class ProjectionService : Service() {
     private var width = 0
     private var height = 0
 
-    @Nullable
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -119,7 +117,8 @@ class ProjectionService : Service() {
                     idx == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> continue
                     idx < 0 -> continue
                     else -> {
-                        val buffer = encoder.getOutputBuffer(idx) ?: run {
+                        val buffer = encoder.getOutputBuffer(idx)
+                        if (buffer == null) {
                             encoder.releaseOutputBuffer(idx, false)
                             continue
                         }
