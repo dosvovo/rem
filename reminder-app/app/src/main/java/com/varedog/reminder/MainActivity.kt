@@ -44,9 +44,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ReminderAdapter
     private val selected = Calendar.getInstance()
 
-    private lateinit var bannerOverlay: LinearLayout
-    private lateinit var bannerAlarm: LinearLayout
-    private lateinit var bannerBattery: LinearLayout
+    private lateinit var bannerOverlay: TextView
+    private lateinit var bannerAlarm: TextView
+    private lateinit var bannerBattery: TextView
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
