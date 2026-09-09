@@ -18,6 +18,9 @@ interface ReminderDao {
     @Query("SELECT * FROM reminders WHERE enabled = 1 AND triggerAtMillis > :now ORDER BY triggerAtMillis ASC")
     suspend fun getUpcoming(now: Long): List<Reminder>
 
+    @Query("SELECT * FROM reminders WHERE enabled = 1 AND triggerAtMillis < :now ORDER BY triggerAtMillis ASC")
+    suspend fun getOverdue(now: Long): List<Reminder>
+
     @Insert
     suspend fun insert(reminder: Reminder): Long
 

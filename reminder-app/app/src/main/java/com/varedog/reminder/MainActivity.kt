@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.fab).setOnClickListener { showCreateDialog() }
         findViewById<View>(R.id.button_settings).setOnClickListener { showSettingsDialog() }
         requestNotificationPermissionIfNeeded()
+        AlarmScheduler.scheduleHeartbeat(this)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -86,6 +87,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         refreshPermissionBanners()
+        // 打开应用时补发错过的提醒（ROM 清理/冻结进程后的兜底）
+        lifecycleScope.launch { OverdueChecker.fireOverdue(this@MainActivity) }
     }
 
     private fun refreshPermissionBanners() {

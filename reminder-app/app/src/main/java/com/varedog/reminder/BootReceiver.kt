@@ -17,6 +17,7 @@ class BootReceiver : BroadcastReceiver() {
                 val dao = AppDatabase.get(context).reminderDao()
                 val upcoming = dao.getUpcoming(System.currentTimeMillis())
                 AlarmScheduler.rescheduleAll(context, upcoming)
+                AlarmScheduler.scheduleHeartbeat(context)
             } finally {
                 pending.finish()
             }
