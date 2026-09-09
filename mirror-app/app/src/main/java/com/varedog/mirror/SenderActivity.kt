@@ -6,14 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
-import android.net.Inet4Address
-import android.net.NetworkInterface
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import java.net.Inet4Address
+import java.net.NetworkInterface
 
 class SenderActivity : Activity() {
 
